@@ -1,0 +1,48 @@
+# Compiled output
+/dist
+/node_modules
+/build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDE
+.idea
+.vscode
+*.code-workspace
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Debug
+.npm
+
+# TypeScript
+*.tsbuildinfo
+
+# Playwright
+playwright-report/
+playwright/.cache/
+test-results/
+
+# Redis dump
+dump.rdb
