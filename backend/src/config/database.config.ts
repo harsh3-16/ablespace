@@ -14,7 +14,10 @@ export default registerAs('database', () => {
       username: decodeURIComponent(url.username),
       password: decodeURIComponent(url.password),
       database: url.pathname.slice(1), // Remove leading /
-      ssl: url.searchParams.get('sslmode') !== 'disable' ? { rejectUnauthorized: false } : false,
+      ssl:
+        url.searchParams.get('sslmode') !== 'disable'
+          ? { rejectUnauthorized: false }
+          : false,
       synchronize: process.env.NODE_ENV !== 'production',
       autoLoadEntities: true,
     };
@@ -28,7 +31,10 @@ export default registerAs('database', () => {
     username: process.env.DATABASE_USERNAME || 'postgres',
     password: process.env.DATABASE_PASSWORD || 'postgres',
     database: process.env.DATABASE_NAME || 'product_explorer',
-    ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : false,
+    ssl:
+      process.env.DATABASE_SSL === 'true'
+        ? { rejectUnauthorized: false }
+        : false,
     synchronize: process.env.NODE_ENV !== 'production',
     autoLoadEntities: true,
   };

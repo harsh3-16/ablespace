@@ -47,8 +47,10 @@ export class ScraperService {
     await this.scrapeJobRepository.save(job);
 
     // Execute scrape asynchronously
-    this.executeScrape(job, forceRefresh).catch((error) => {
-      this.logger.error(`Scrape failed for ${targetUrl}: ${error.message}`);
+    this.executeScrape(job, forceRefresh).catch((error: unknown) => {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      this.logger.error(`Scrape failed for ${targetUrl}: ${errorMessage}`);
     });
 
     return job;
@@ -56,7 +58,8 @@ export class ScraperService {
 
   private async executeScrape(
     job: ScrapeJob,
-    forceRefresh: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _forceRefresh: boolean,
   ): Promise<void> {
     try {
       // Update job status to running
@@ -94,14 +97,16 @@ export class ScraperService {
       this.logger.log(
         `Scrape completed: ${itemsScraped} items from ${job.targetUrl}`,
       );
-    } catch (error) {
+    } catch (error: unknown) {
       // Update job as failed
       job.status = ScrapeJobStatus.FAILED;
       job.finishedAt = new Date();
-      job.errorLog = error.message;
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      job.errorLog = errorMessage;
       await this.scrapeJobRepository.save(job);
 
-      this.logger.error(`Scrape failed: ${error.message}`);
+      this.logger.error(`Scrape failed: ${errorMessage}`);
       throw error;
     }
   }

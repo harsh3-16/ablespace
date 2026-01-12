@@ -15,7 +15,7 @@ export default function CategoriesPage() {
                     <h1 className="text-4xl font-bold mb-4">Browse Categories</h1>
                     <p className="text-xl text-white/80 max-w-2xl">
                         Explore our vast collection of books organized by genre. From fiction to non-fiction,
-                        find exactly what you're looking for.
+                        find exactly what you&apos;re looking for.
                     </p>
                 </div>
             </section>

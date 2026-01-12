@@ -48,7 +48,7 @@ export interface ProductDetail {
     id: string;
     description?: string;
     longDescription?: string;
-    specs?: Record<string, any>;
+    specs?: Record<string, unknown>;
     ratingsAvg?: number;
     reviewsCount: number;
     publisher?: string;

@@ -62,7 +62,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link href="/categories/childrens-books" className="text-white/80 hover:text-white transition-colors">
-                                    Children's Books
+                                    Children&apos;s Books
                                 </Link>
                             </li>
                         </ul>

@@ -18,8 +18,9 @@ export default function AdminPage() {
             const job = await triggerScrape(url, targetType, false);
             setMessage(`Scrape job started! Job ID: ${job.id}`);
             refreshJobs();
-        } catch (error: any) {
-            setMessage(`Error: ${error.message || 'Failed to start scrape'}`);
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : 'Failed to start scrape';
+            setMessage(`Error: ${errorMessage}`);
         } finally {
             setIsLoading(false);
         }

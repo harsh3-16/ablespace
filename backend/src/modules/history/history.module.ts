@@ -5,9 +5,9 @@ import { HistoryController } from './history.controller';
 import { HistoryService } from './history.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([ViewHistory])],
-    controllers: [HistoryController],
-    providers: [HistoryService],
-    exports: [HistoryService],
+  imports: [TypeOrmModule.forFeature([ViewHistory])],
+  controllers: [HistoryController],
+  providers: [HistoryService],
+  exports: [HistoryService],
 })
-export class HistoryModule { }
+export class HistoryModule {}

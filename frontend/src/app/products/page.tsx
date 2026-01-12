@@ -1,3 +1,4 @@
+ 
 'use client';
 
 import Link from 'next/link';
@@ -20,7 +21,7 @@ export default function ProductsPage() {
     useEffect(() => {
         setSearchQuery(urlSearch);
         setPage(1);
-    }, [urlSearch]);
+    }, [urlSearch]);  
 
     const { data, isLoading, error } = useProducts({
         page,
@@ -42,7 +43,7 @@ export default function ProductsPage() {
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <h1 className="text-4xl font-bold mb-4">All Products</h1>
                         <p className="text-xl text-white/80 max-w-2xl">
-                            Browse our complete collection of books. Use filters to find exactly what you're looking for.
+                            Browse our complete collection of books. Use filters to find exactly what you&apos;re looking for.
                         </p>
                     </div>
                 </section>

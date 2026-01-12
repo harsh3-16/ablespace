@@ -10,7 +10,7 @@ export class NavigationService {
   constructor(
     @InjectRepository(Navigation)
     private readonly navigationRepository: Repository<Navigation>,
-  ) { }
+  ) {}
 
   async findAll(): Promise<Navigation[]> {
     return this.navigationRepository.find({
@@ -42,7 +42,9 @@ export class NavigationService {
         ...data,
         lastScrapedAt: new Date(),
       });
-      const updated = await this.navigationRepository.findOne({ where: { id: existing.id } });
+      const updated = await this.navigationRepository.findOne({
+        where: { id: existing.id },
+      });
       if (!updated) throw new Error('Failed to find updated navigation');
       return updated;
     }

@@ -2,7 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product, ProductDetail, Review } from '../../entities';
-import { ProductQueryDto, PaginatedResponse } from './dto/product-query.dto';
+import {
+  ProductQueryDto,
+  PaginatedResponse,
+  ProductSortBy,
+} from './dto/product-query.dto';
 
 @Injectable()
 export class ProductsService {
@@ -15,10 +19,20 @@ export class ProductsService {
     private readonly productDetailRepository: Repository<ProductDetail>,
     @InjectRepository(Review)
     private readonly reviewRepository: Repository<Review>,
-  ) { }
+  ) {}
 
   async findAll(query: ProductQueryDto): Promise<PaginatedResponse<Product>> {
-    const { page = 1, limit = 20, categoryId, search, minPrice, maxPrice, sortBy = 'createdAt', sortOrder = 'DESC', inStock } = query;
+    const {
+      page = 1,
+      limit = 20,
+      categoryId,
+      search,
+      minPrice,
+      maxPrice,
+      sortBy = 'createdAt',
+      sortOrder = 'DESC',
+      inStock,
+    } = query;
     const skip = (page - 1) * limit;
 
     const qb = this.productRepository.createQueryBuilder('product');
@@ -48,7 +62,7 @@ export class ProductsService {
     }
 
     // Apply sorting
-    if (sortBy === 'ratingsAvg') {
+    if (sortBy === ProductSortBy.RATING) {
       qb.leftJoin('product.detail', 'detail');
       qb.orderBy('detail.ratingsAvg', sortOrder);
     } else {
@@ -109,7 +123,9 @@ export class ProductsService {
         ...data,
         lastScrapedAt: new Date(),
       });
-      const updated = await this.productRepository.findOne({ where: { id: existing.id } });
+      const updated = await this.productRepository.findOne({
+        where: { id: existing.id },
+      });
       if (!updated) throw new Error('Failed to find updated product');
       return updated;
     }
@@ -121,8 +137,13 @@ export class ProductsService {
     return this.productRepository.save(product);
   }
 
-  async upsertProductDetail(productId: string, data: Partial<ProductDetail>): Promise<ProductDetail> {
-    const product = await this.productRepository.findOne({ where: { id: productId } });
+  async upsertProductDetail(
+    productId: string,
+    data: Partial<ProductDetail>,
+  ): Promise<ProductDetail> {
+    const product = await this.productRepository.findOne({
+      where: { id: productId },
+    });
     if (!product) throw new Error('Product not found');
 
     const existing = await this.productDetailRepository.findOne({
@@ -131,7 +152,9 @@ export class ProductsService {
 
     if (existing) {
       await this.productDetailRepository.update(existing.id, data);
-      const updated = await this.productDetailRepository.findOne({ where: { id: existing.id } });
+      const updated = await this.productDetailRepository.findOne({
+        where: { id: existing.id },
+      });
       if (!updated) throw new Error('Failed to find updated product detail');
       return updated;
     }
@@ -143,7 +166,10 @@ export class ProductsService {
     return this.productDetailRepository.save(detail);
   }
 
-  async addReviews(productId: string, reviews: Partial<Review>[]): Promise<Review[]> {
+  async addReviews(
+    productId: string,
+    reviews: Partial<Review>[],
+  ): Promise<Review[]> {
     const savedReviews: Review[] = [];
 
     for (const reviewData of reviews) {
@@ -156,9 +182,13 @@ export class ProductsService {
 
     // Update review count in product detail
     const count = await this.reviewRepository.count({ where: { productId } });
-    const detail = await this.productDetailRepository.findOne({ where: { product: { id: productId } } });
+    const detail = await this.productDetailRepository.findOne({
+      where: { product: { id: productId } },
+    });
     if (detail) {
-      await this.productDetailRepository.update(detail.id, { reviewsCount: count });
+      await this.productDetailRepository.update(detail.id, {
+        reviewsCount: count,
+      });
     }
 
     return savedReviews;
@@ -171,7 +201,9 @@ export class ProductsService {
 
     if (!detail || !detail.recommendedProductIds?.length) {
       // Return random products from same category as fallback
-      const product = await this.productRepository.findOne({ where: { id: productId } });
+      const product = await this.productRepository.findOne({
+        where: { id: productId },
+      });
       if (product?.categoryId) {
         return this.productRepository.find({
           where: { categoryId: product.categoryId },
@@ -187,7 +219,10 @@ export class ProductsService {
       .getMany();
   }
 
-  async needsRefresh(sourceId: string, ttlHours: number = 24): Promise<boolean> {
+  async needsRefresh(
+    sourceId: string,
+    ttlHours: number = 24,
+  ): Promise<boolean> {
     const product = await this.productRepository.findOne({
       where: { sourceId },
     });

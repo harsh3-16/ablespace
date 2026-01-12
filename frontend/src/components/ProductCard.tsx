@@ -1,3 +1,4 @@
+ 
 import Link from 'next/link';
 import type { Product } from '@/types';
 
@@ -65,8 +66,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                                         <svg
                                             key={star}
                                             className={`w-4 h-4 ${star <= Math.round(product.detail!.ratingsAvg!)
-                                                    ? 'text-[#E53888]'
-                                                    : 'text-gray-200'
+                                                ? 'text-[#E53888]'
+                                                : 'text-gray-200'
                                                 }`}
                                             fill="currentColor"
                                             viewBox="0 0 20 20"
