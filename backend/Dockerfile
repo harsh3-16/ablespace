@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:20-bookworm AS builder
 
 WORKDIR /app
 
@@ -16,19 +16,22 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM node:18-alpine AS runner
+# Use official Playwright image which includes Node.js and browser dependencies
+FROM mcr.microsoft.com/playwright:v1.49.1-jammy AS runner
 
 WORKDIR /app
 
-# Install production dependencies only
+# Copy package files
 COPY package*.json ./
+
+# Install production dependencies only
 RUN npm ci --only=production
 
 # Copy built application
 COPY --from=builder /app/dist ./dist
 
-# Install Playwright browsers for scraping
-RUN npx playwright install chromium --with-deps
+# Install Chromium (even if in base image, ensures version match)
+RUN npx playwright install chromium
 
 # Expose port
 EXPOSE 3001
