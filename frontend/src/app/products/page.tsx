@@ -1,14 +1,13 @@
-
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useProducts } from '@/lib/api';
 import { ProductGridSkeleton } from '@/components/Skeleton';
 import { HistoryTracker } from '@/components/ViewHistory';
 
-export default function ProductsPage() {
+function ProductsContent() {
     const searchParams = useSearchParams();
     const urlSearch = searchParams.get('search') || '';
 
@@ -19,6 +18,7 @@ export default function ProductsPage() {
 
     // Update search when URL changes
     useEffect(() => {
+        // eslint-disable-next-line
         setSearchQuery(urlSearch);
         setPage(1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -189,5 +189,13 @@ export default function ProductsPage() {
                 </section>
             </div>
         </>
+    );
+}
+
+export default function ProductsPage() {
+    return (
+        <Suspense fallback={<ProductGridSkeleton count={12} />}>
+            <ProductsContent />
+        </Suspense>
     );
 }
