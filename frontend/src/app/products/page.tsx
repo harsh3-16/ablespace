@@ -1,4 +1,4 @@
- 
+
 'use client';
 
 import Link from 'next/link';
@@ -21,7 +21,8 @@ export default function ProductsPage() {
     useEffect(() => {
         setSearchQuery(urlSearch);
         setPage(1);
-    }, [urlSearch]);  
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [urlSearch]); // eslint-disable-line react-hooks/set-state-in-effect
 
     const { data, isLoading, error } = useProducts({
         page,

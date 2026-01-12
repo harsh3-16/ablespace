@@ -81,20 +81,22 @@ describe('HistoryService', () => {
           {
             path: '/products',
             title: 'Products',
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             timestamp: expect.any(String),
           },
         ],
         lastPath: '/products',
       } as ViewHistory);
 
-      const result = await service.addPathToHistory(
-        'session-123',
-        '/products',
-        'Products',
-      );
+      await service.addPathToHistory('session-123', '/products', 'Products');
 
       expect(historyRepo.save).toHaveBeenCalled();
-      expect(result.lastPath).toBe('/products');
+      // Verify via spy since we aren't capturing the return result anymore
+      expect(historyRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          lastPath: '/products',
+        }),
+      );
     });
 
     it('should create new history for new session', async () => {
@@ -102,6 +104,7 @@ describe('HistoryService', () => {
       historyRepo.create.mockReturnValue({
         sessionId: 'new-session',
         pathHistory: [
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           { path: '/', title: 'Home', timestamp: expect.any(String) },
         ],
         lastPath: '/',
@@ -110,12 +113,13 @@ describe('HistoryService', () => {
         id: 'new-id',
         sessionId: 'new-session',
         pathHistory: [
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           { path: '/', title: 'Home', timestamp: expect.any(String) },
         ],
         lastPath: '/',
       } as ViewHistory);
 
-      const result = await service.addPathToHistory('new-session', '/', 'Home');
+      await service.addPathToHistory('new-session', '/', 'Home');
 
       expect(historyRepo.create).toHaveBeenCalled();
       expect(historyRepo.save).toHaveBeenCalled();
@@ -144,6 +148,7 @@ describe('HistoryService', () => {
 
   describe('clearHistory', () => {
     it('should delete history by session ID', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       historyRepo.delete.mockResolvedValue({ affected: 1 } as any);
 
       await service.clearHistory('session-123');

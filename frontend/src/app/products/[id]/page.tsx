@@ -1,10 +1,10 @@
- 
+
 'use client';
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useProduct, useRecommendedProducts } from '@/lib/api';
-import { ProductDetailSkeleton, ProductGridSkeleton } from '@/components/Skeleton';
+import { ProductDetailSkeleton } from '@/components/Skeleton';
 import { HistoryTracker } from '@/components/ViewHistory';
 
 export default function ProductPage() {

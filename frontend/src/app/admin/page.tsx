@@ -55,7 +55,7 @@ export default function AdminPage() {
                             </label>
                             <select
                                 value={targetType}
-                                onChange={(e) => setTargetType(e.target.value as any)}
+                                onChange={(e) => setTargetType(e.target.value as 'navigation' | 'category' | 'product_list' | 'product_detail')}
                                 className="w-full px-4 py-2 bg-white text-gray-900 border border-[#F7A8C4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E53888]"
                             >
                                 <option value="navigation">Navigation (Main headings)</option>

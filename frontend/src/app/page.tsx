@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useNavigations } from '@/lib/api';
-import { ProductGridSkeleton, CategoryGridSkeleton } from '@/components/Skeleton';
+import { CategoryGridSkeleton } from '@/components/Skeleton';
 import { HistoryTracker } from '@/components/ViewHistory';
 
 export default function HomePage() {
