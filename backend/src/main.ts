@@ -8,13 +8,29 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   // Enable CORS
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-  const origin = frontendUrl.includes(',')
-    ? frontendUrl.split(',').map((url) => url.trim())
-    : frontendUrl;
-
+  // Enable CORS
   app.enableCors({
-    origin,
+    origin: (
+      requestOrigin: string,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
+      const allowedOrigins = (
+        process.env.FRONTEND_URL || 'http://localhost:3000'
+      )
+        .split(',')
+        .map((u) => u.trim());
+
+      if (!requestOrigin) return callback(null, true);
+
+      if (
+        allowedOrigins.includes(requestOrigin) ||
+        requestOrigin.endsWith('.vercel.app')
+      ) {
+        return callback(null, true);
+      }
+
+      callback(new Error(`Not allowed by CORS: ${requestOrigin}`));
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
   });
