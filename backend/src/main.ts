@@ -8,8 +8,13 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   // Enable CORS
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  const origin = frontendUrl.includes(',')
+    ? frontendUrl.split(',').map((url) => url.trim())
+    : frontendUrl;
+
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
   });
